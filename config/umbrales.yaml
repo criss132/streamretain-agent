@@ -1,0 +1,131 @@
+# Medidas de desempeño, umbrales y protocolo de evaluación — Fase 3 (StreamRetain-Agent)
+#
+# REGLA: este archivo se congela con commit + tag `umbrales-congelados` ANTES de ejecutar la
+# evaluación. Prohibido modificar umbrales, aplicabilidad o protocolo después de ver resultados.
+# Estado: BORRADOR para el CP2 (pendiente de validación por la pareja).
+
+version: 1
+
+protocolo:
+  # --- Separación de datos (sin fuga) ---
+  semillas:
+    entrenamiento: [1, 20]      # rango inclusivo: poblaciones sintéticas para la "pre-historia" etiquetada
+    validacion: [501, 505]      # elección de modelo, calibración y umbral de decisión tau
+    prueba: [1001, 1010]        # 10 repeticiones por escenario; se usan UNA vez, en la evaluación final
+  separacion: >
+    Cada semilla genera una población distinta de suscriptores, de modo que entrenamiento,
+    validación y prueba quedan separados por usuario y por semilla.
+
+  # --- Selección de modelo y del umbral de decisión (solo en validación) ---
+  seleccion_modelo: >
+    Candidatos: regresión logística y un modelo de gradient boosting (scikit-learn), ambos
+    calibrados. Se elige el de mayor AUC-ROC promedio en las semillas de validación del
+    escenario N2. La prueba no interviene en la elección.
+  umbral_decision_tau: >
+    tau = umbral que maximiza el índice de Youden (recall + especificidad − 1) en las semillas
+    de validación del escenario N2. Se guarda junto al modelo y no se cambia en prueba.
+  presupuesto_intervencion: >
+    En cada ciclo, el agente activa ofertas para los usuarios con p >= tau, limitados a los
+    K de mayor riesgo, con K = 10 % de la base activa. M1, M1R y M2 usan la clasificación
+    p >= tau; M3 usa el ranking top-K.
+
+  # --- Etiqueta contra la que se mide ---
+  etiqueta: >
+    Las medidas predictivas (M1–M4) se calculan contra la etiqueta natural
+    "cancela_en_4_semanas SIN intervención", que el simulador genera antes de aplicar el
+    efecto de la oferta. Así, una oferta exitosa no convierte un acierto en falso positivo.
+    En un entorno real se necesitaría un grupo de control; esto se declara como limitación.
+
+  # --- Unidad de medida y agregación ---
+  caso: "Un caso = un escenario x una semilla de prueba (13 escenarios x 10 semillas = 130 ejecuciones)."
+  metrica_por_caso: >
+    Las predicciones de todos los ciclos de decisión del caso se agrupan y se calcula la
+    métrica una vez por caso.
+  agregacion: >
+    Por medida se reporta media ± desviación estándar sobre todos los casos aplicables, el
+    porcentaje de casos que alcanzan el umbral y el desglose por tipo (normal, límite, falla).
+  regla_cumplimiento: >
+    Una medida CUMPLE si la media sobre sus casos aplicables alcanza el umbral (>= o <=, según
+    la medida). No se excluyen casos después de ver resultados.
+
+  # --- Referencias de comparación (se reportan, no tienen umbral) ---
+  baselines:
+    - "Ingenuo 'nadie cancela' (predice 0 para todos)"
+    - "Regresión logística simple sin variables de tendencia"
+
+  # --- Calibración del simulador (Fase 2): criterio de dificultad fijado de antemano ---
+  calibracion_simulador: >
+    Los parámetros de `senal` en escenarios.yaml se ajustan solo con semillas de entrenamiento
+    hasta que una regresión logística simple, entrenada en las semillas 1–10 y medida en las
+    11–20 del escenario N2, obtenga un AUC-ROC entre 0,70 y 0,90 (ni trivial ni imposible).
+    No se usan semillas de validación ni de prueba para calibrar.
+
+medidas:
+  - id: M1
+    nombre: "Precisión general (accuracy), medida SMART original"
+    formula: "(TP + TN) / N, en cada ciclo semanal, agrupado por caso"
+    operador: ">="
+    umbral: 0.75
+    aplica_a: [N1, N2, N3, N4, N5, N6, L1, L2, L3, L4, F1, F2, F3]
+    nota: >
+      Se mantiene tal como está en la sección 7 del diseño. El baseline "nadie cancela" obtiene
+      accuracy = 1 − tasa base, es decir, >= 75 % en todo escenario con tasa base <= 25 % (12 de
+      13 escenarios). Por eso M1 no discrimina y, desde ya (antes de probar), la medida principal
+      reformulada es M1R. M1 se reporta junto al baseline.
+
+  - id: M1R
+    nombre: "Precisión balanceada (balanced accuracy), medida SMART reformulada"
+    formula: "(recall + especificidad) / 2 = (TP/(TP+FN) + TN/(TN+FP)) / 2"
+    operador: ">="
+    umbral: 0.75
+    aplica_a: [N1, N2, N3, N4, N5, N6, L1, L2, L3, L4, F1, F2, F3]
+    nota: "Conserva el 75 % del diseño, pero el baseline ingenuo obtiene 0,50 y no puede cumplirla."
+
+  - id: M2
+    nombre: "Recall de la clase 'cancela'"
+    formula: "TP / (TP + FN)"
+    operador: ">="
+    umbral: 0.60
+    aplica_a: [N1, N2, N3, N4, N5, N6, L1, L2, L3, L4, F1, F2, F3]
+    nota: "Detectar a quien sí se va es el objetivo de negocio de la retención."
+
+  - id: M3
+    nombre: "Precisión en el top-K (K = 10 % de la base activa)"
+    formula: "cancelaciones reales dentro del top-K / K"
+    operador: ">="
+    umbral: 0.50
+    aplica_a: [N1, N2, N3, N4, N5, N6, L1, L3, L4, F1, F2, F3]
+    nota: >
+      L2 queda excluido de antemano por razón matemática: con tasa base de 3 % y K = 10 %, el
+      máximo alcanzable es 0,30 < 0,50. Su valor se reporta solo como información.
+
+  - id: M4
+    nombre: "AUC-ROC"
+    formula: "área bajo la curva ROC de la probabilidad predicha (independiente de tau)"
+    operador: ">="
+    umbral: 0.80
+    aplica_a: [N1, N2, N3, N4, N5, N6, L1, L2, L3, L4, F1, F2, F3]
+
+  - id: M5
+    nombre: "Robustez ante entradas inválidas y fallas del entorno"
+    formula: "eventos de falla manejados correctamente / eventos de falla inyectados"
+    operador: ">="
+    umbral: 1.00
+    aplica_a: [N1, N2, N3, N4, N5, N6, L1, L2, L3, L4, F1, F2, F3]
+    nota: >
+      Todos los escenarios tienen fallas inyectadas (1 % de registros inválidos, 2 % de usuarios
+      nuevos y 3 % de fallos de API como ruido base); F1–F3 las multiplican. Un evento se considera
+      manejado correctamente si no lanza excepción y además: (a) un registro inválido se rechaza con
+      su motivo en el log; (b) un usuario sin historial suficiente recibe predicción marcada como
+      baja confianza sin historial fabricado; (c) un fallo o timeout de la API se reintenta (máx. 3),
+      se registra y los usuarios quedan en cola para el siguiente ciclo.
+
+  - id: M6
+    nombre: "Latencia del ciclo semanal"
+    formula: "segundos por ciclo (perceive + decide + act + log), media por caso"
+    operador: "<="
+    umbral: 10.0
+    aplica_a: [N1, N2, N3, N5, N6, L1, L2, L3, L4, F1, F2, F3]
+    nota: >
+      Solo escenarios con base de 2.000 suscriptores (N4 tiene 500). Se mide en el equipo local
+      del evaluador; se reportan el equipo y la latencia máxima observada.

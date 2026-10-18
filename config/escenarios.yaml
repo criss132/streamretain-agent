@@ -1,0 +1,102 @@
+# Escenarios de prueba — Fase 3 (Tarea 3, StreamRetain-Agent)
+# Se congelan junto con config/umbrales.yaml (tag `umbrales-congelados`).
+# Todos los datos son SINTÉTICOS: los genera el simulador src/streamretain/env/simulator.py.
+#
+# Glosario de parámetros
+#   n_usuarios                 suscriptores activos al inicio
+#   tasa_cancelacion_4s        fracción de la base que cancela en una ventana de 4 semanas (sin intervención)
+#   mezcla_planes              proporción de planes básico / estándar / premium
+#   historial_previo_semanas   semanas capturadas antes del primer ciclo de decisión
+#   ciclos                     ciclos semanales de decisión evaluados (el simulador corre 4 semanas más
+#                              para que maduren las etiquetas del último ciclo)
+#   tasa_registros_invalidos   fracción de registros semanales con NaN, negativos o fuera de rango
+#   tasa_usuarios_nuevos       fracción de la base que entra cada semana sin historial
+#   api_tasa_fallo             probabilidad de que una llamada a la API de marketing devuelva error
+#   api_tasa_timeout           probabilidad de que una llamada a la API de marketing exceda el tiempo
+#   efecto_oferta              probabilidad de que una oferta retenga a un usuario que iba a cancelar
+#   deriva                     cambio de comportamiento a mitad de la simulación (null = sin deriva)
+
+simulador_base:
+  n_usuarios: 2000
+  tasa_cancelacion_4s: 0.15
+  mezcla_planes: {basico: 0.40, estandar: 0.40, premium: 0.20}
+  historial_previo_semanas: 4
+  ciclos: 8
+  tasa_registros_invalidos: 0.01   # ruido operativo realista también en escenarios normales
+  tasa_usuarios_nuevos: 0.02
+  api_tasa_fallo: 0.02
+  api_tasa_timeout: 0.01
+  efecto_oferta: 0.30
+  deriva: null
+
+# Parámetros de la señal (valores iniciales). Se calibran en la Fase 2 SOLO con semillas de
+# entrenamiento y con el criterio de dificultad congelado en umbrales.yaml
+# (protocolo.calibracion_simulador), nunca mirando resultados de prueba. Los valores finales
+# se registran aquí con un commit aparte que diga "calibración del simulador".
+senal:
+  semanas_decaimiento_previo: 3      # semanas antes de cancelar en que el consumo empieza a caer
+  caida_consumo_media: 0.35          # caída relativa media del consumo de quien va a cancelar
+  ruido_consumo_rel: 0.30            # desviación relativa semanal del consumo (todos los usuarios)
+  aumento_dias_sin_login: 4.0        # días adicionales medios sin login de quien va a cancelar
+  multiplicador_cambio_pago: 2.0     # razón de riesgo si hubo cambio reciente de método de pago
+  fraccion_cancelacion_sin_senal: 0.25  # cancelaciones "súbitas", sin señal previa observable
+
+escenarios:
+  # ---------------- Normales (6) ----------------
+  - id: N1
+    tipo: normal
+    descripcion: "Tasa base 10 %, base de 2.000, 8 ciclos"
+    parametros: {tasa_cancelacion_4s: 0.10}
+  - id: N2
+    tipo: normal
+    descripcion: "Escenario de referencia: tasa base 15 %, base de 2.000, 8 ciclos"
+    parametros: {}
+  - id: N3
+    tipo: normal
+    descripcion: "Tasa base 20 %, base de 2.000, 8 ciclos"
+    parametros: {tasa_cancelacion_4s: 0.20}
+  - id: N4
+    tipo: normal
+    descripcion: "Cohorte pequeña: base de 500, tasa 15 %"
+    parametros: {n_usuarios: 500}
+  - id: N5
+    tipo: normal
+    descripcion: "Horizonte largo: 12 ciclos, tasa 15 %"
+    parametros: {ciclos: 12}
+  - id: N6
+    tipo: normal
+    descripcion: "Mezcla de planes distinta: 60 % básico / 30 % estándar / 10 % premium"
+    parametros: {mezcla_planes: {basico: 0.60, estandar: 0.30, premium: 0.10}}
+
+  # ---------------- Límite (4) ----------------
+  - id: L1
+    tipo: limite
+    descripcion: "Historial previo de 1 semana: el primer ciclo opera sin historial suficiente"
+    parametros: {historial_previo_semanas: 1}
+  - id: L2
+    tipo: limite
+    descripcion: "Tasa base muy baja (3 %): clase positiva escasa"
+    parametros: {tasa_cancelacion_4s: 0.03}
+  - id: L3
+    tipo: limite
+    descripcion: "Tasa base muy alta (40 %)"
+    parametros: {tasa_cancelacion_4s: 0.40}
+  - id: L4
+    tipo: limite
+    descripcion: "Deriva de comportamiento en la semana 4: consumo global −20 % y señal de consumo más débil"
+    parametros:
+      deriva: {semana: 4, consumo_global_rel: -0.20, caida_consumo_media: 0.20}
+
+  # ---------------- Falla esperada (3) ----------------
+  - id: F1
+    tipo: falla
+    descripcion: "Entradas inválidas: 10 % de registros con NaN, negativos o fuera de rango"
+    parametros: {tasa_registros_invalidos: 0.10}
+  - id: F2
+    tipo: falla
+    descripcion: "Sensor sin dato / usuarios sin historial: 20 % de la base entra nueva cada semana"
+    parametros: {tasa_usuarios_nuevos: 0.20}
+  - id: F3
+    tipo: falla
+    descripcion: "Entorno adverso: API de marketing con 30 % de fallos o timeouts (20 % error + 10 % timeout)"
+    parametros: {api_tasa_fallo: 0.20, api_tasa_timeout: 0.10}
