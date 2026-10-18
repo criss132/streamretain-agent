@@ -1,0 +1,72 @@
+# Matriz de decisión ponderada — Fase 1 (Tarea 3)
+# Los pesos se definen ANTES de puntuar y deben sumar 1.0.
+# Cada puntaje (1–5) lleva una frase de evidencia: un puntaje sin evidencia no cuenta.
+# Estado: BORRADOR propuesto por Claude Code; la pareja lo valida o corrige en el CP1.
+
+agentes:
+  A: "PickFlow-Agent (optimización de picking en bodega)"
+  B: "StreamRetain-Agent (predicción de cancelación en streaming)"
+
+# Variación del análisis de sensibilidad, en fracción (0.10 = 10 puntos porcentuales)
+sensibilidad_delta: 0.10
+
+criterios:
+  - nombre: "Viabilidad técnica"
+    peso: 0.25
+    justificacion_peso: "Mayor riesgo del proyecto: el agente debe funcionar y probarse en el tiempo disponible (entrega 19-oct-2026)."
+    A:
+      puntaje: 3
+      evidencia: "Exige simular bodega con operarios y robots y aprender una política de asignación y ruta (utilidad + aprendizaje); factible, pero con más componentes nuevos que construir."
+    B:
+      puntaje: 5
+      evidencia: "Pipeline supervisado conocido (scikit-learn: preprocesamiento, clasificador, calibración) más un simulador semanal sencillo; todos los componentes ya los sabemos implementar."
+
+  - nombre: "Disponibilidad de datos o entorno"
+    peso: 0.20
+    justificacion_peso: "Sin entorno o datos simulables no hay percepciones ni pruebas."
+    A:
+      puntaje: 3
+      evidencia: "No hay WMS real; el simulador debe modelar rutas, tiempos estocásticos, picos de demanda y fallas de robots, sin datos de referencia para calibrarlo."
+    B:
+      puntaje: 4
+      evidencia: "Las percepciones de la sección 5 (horas vistas, días sin login, plan, cambio de pago) se generan con un simulador semanal estocástico; no existe historial semanal real, por eso no es 5."
+
+  - nombre: "Medibilidad del desempeño"
+    peso: 0.20
+    justificacion_peso: "El 20 % de la nota (pruebas) depende de medir con fórmula y umbral."
+    A:
+      puntaje: 4
+      evidencia: "El tiempo promedio vs. línea base en simulador es objetivo, pero la medida SMART exige 2 semanas de operación real, que no es replicable y debe reformularse."
+    B:
+      puntaje: 5
+      evidencia: "La medida SMART (precisión general ≥ 75 % = aciertos / predicciones) ya tiene fórmula y umbral, y se calcula sobre datos de prueba no usados en entrenamiento."
+
+  - nombre: "Complejidad de IA"
+    peso: 0.15
+    justificacion_peso: "La asignatura exige razonamiento o aprendizaje real, pero no a costa de no terminar."
+    A:
+      puntaje: 5
+      evidencia: "Agente de aprendizaje con elemento de desempeño basado en utilidad, ambiente multiagente y secuencial (Russell y Norvig)."
+    B:
+      puntaje: 3
+      evidencia: "Agente de aprendizaje con estado interno por usuario, pero la decisión es clasificación supervisada + regla de umbral; menos razonamiento secuencial."
+
+  - nombre: "Costo y recursos"
+    peso: 0.10
+    justificacion_peso: "Cuenta gratuita de despliegue y sin APIs pagas: restricción real pero secundaria."
+    A:
+      puntaje: 5
+      evidencia: "Todo corre local en Python con librerías libres; costo estimado COP 0 y sin llamadas a APIs pagas."
+    B:
+      puntaje: 5
+      evidencia: "Todo corre local en Python con librerías libres; la API de marketing es un simulador; costo estimado COP 0."
+
+  - nombre: "Valor del problema"
+    peso: 0.10
+    justificacion_peso: "Usuario y beneficio ya están descritos en ambos diseños; poco diferenciador."
+    A:
+      puntaje: 4
+      evidencia: "Usuario: supervisor de bodega; beneficio: menos tiempo de preparación y desplazamiento (meta de −20 %)."
+    B:
+      puntaje: 4
+      evidencia: "Usuario: analista de retención; beneficio: anticipar cancelaciones a 4 semanas y proteger ingreso recurrente."

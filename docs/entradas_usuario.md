@@ -10,8 +10,8 @@ Registro de lo que la pareja aportó o confirmó. Fuente: mensajes de Christian 
 | 4 | Cuenta de GitHub | `criss132`. Repo remoto vacío: https://github.com/criss132/streamretain-agent.git (configurado como `origin`; **sin push hasta aprobación**) | Confirmado |
 | 5 | Cuenta de despliegue | Streamlit Community Cloud, ya creada y conectada a GitHub | Confirmado |
 | 6 | Evidencia de funcionamiento | Opción A (despliegue en Streamlit Cloud) + guion de video de respaldo | Confirmado |
-| 7 | Fecha de entrega | SAVIO muestra cierre: lunes 19-oct-2026, 07:00 (America/Bogotá) | Por confirmar con el usuario |
-| 8 | Fecha de calificación | — | Por preguntar |
+| 7 | Fecha de entrega | Lunes 19-oct-2026, 07:00 (America/Bogotá), según SAVIO; confirmada por Christian | Confirmado |
+| 8 | Fecha de calificación | Christian la indicará aparte | Pendiente (no bloquea) |
 
 ## Entorno técnico
 
