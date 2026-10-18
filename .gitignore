@@ -1,0 +1,28 @@
+# Entornos virtuales (el del proyecto vive fuera de OneDrive: C:\dev\venvs\agente)
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Memoria SQLite de ejecuciones locales
+*.sqlite
+*.db
+
+# Logs de ejecuciones locales (los de la evaluación final se agregan explícitamente con git add -f)
+logs/*
+!logs/.gitkeep
+
+# Streamlit / secretos
+.streamlit/secrets.toml
+.env
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+~$*

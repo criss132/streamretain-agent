@@ -1,0 +1,9 @@
+# Bitácora de uso de IA — StreamRetain-Agent (Tarea 3)
+
+Pareja: Christian David Menco Galván (T00058749) · Levis Adrian Ortiz Cano (T00083674)
+
+Regla: una fila por bloque de trabajo asistido por IA. Ninguna fila se inventa ni se borra. La columna **Verificación humana** la completa la pareja después de revisar el resultado.
+
+| # | Fecha | Herramienta / modelo | Tarea | Prompt o instrucción (resumen) | Qué se usó del resultado | Verificación humana |
+|---|---|---|---|---|---|---|
+| 1 | 2026-10-18 | Claude Code (Claude Opus 5.5) | CP0 — lectura de la guía y de los diseños de Tarea 2; creación del repositorio, entorno virtual, estructura de carpetas, `.gitignore` y esta bitácora | "Lee PLAN_TAREA3.md, los PDFs de entradas/ y las capturas de la guía; ejecuta el CP0" | Estructura del repo, `.gitignore`, `docs/entradas_usuario.md`, esta bitácora | _(pendiente)_ |
