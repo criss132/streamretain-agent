@@ -1,14 +1,14 @@
 {
   "criterio": "0.70 <= AUC(LR sin tendencia, semillas 1-10 -> 11-20, N2) <= 0.90",
-  "auc": 0.7009,
+  "auc": 0.7504,
   "cumple": true,
-  "tasa_positivos_entrenamiento": 0.1507,
-  "filas_entrenamiento": 138642,
-  "filas_prueba": 139059,
+  "tasa_positivos_entrenamiento": 0.152,
+  "filas_entrenamiento": 145077,
+  "filas_prueba": 145265,
   "senal": {
     "semanas_decaimiento_previo": 3,
     "caida_consumo_media": 0.35,
-    "ruido_consumo_rel": 0.25,
+    "ruido_consumo_rel": 0.3,
     "aumento_dias_sin_login": 4.0,
     "multiplicador_cambio_pago": 2.0,
     "fraccion_cancelacion_sin_senal": 0.25

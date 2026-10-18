@@ -66,6 +66,14 @@ class Memoria:
         self.con.executemany("INSERT OR REPLACE INTO cola VALUES (?,?)", [(u, semana) for u in user_ids])
         self.con.commit()
 
+    def purgar_cola(self, semana_minima: int) -> list[str]:
+        """Elimina de la cola las entradas originadas antes de `semana_minima` (vencidas)."""
+        vencidos = [r[0] for r in self.con.execute(
+            "SELECT user_id FROM cola WHERE semana_origen < ?", (semana_minima,))]
+        self.con.execute("DELETE FROM cola WHERE semana_origen < ?", (semana_minima,))
+        self.con.commit()
+        return vencidos
+
     def desencolar(self, user_ids: list[str]) -> None:
         self.con.executemany("DELETE FROM cola WHERE user_id = ?", [(u,) for u in user_ids])
         self.con.commit()

@@ -1,0 +1,58 @@
+{
+  "escenario": "N2",
+  "semillas_entrenamiento": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "semillas_validacion": [
+    501,
+    502,
+    503,
+    504,
+    505
+  ],
+  "filas_entrenamiento": 277701,
+  "filas_validacion": 69245,
+  "tasa_positivos_entrenamiento": 0.1506,
+  "candidatos": {
+    "logistica": {
+      "auc_validacion": 0.6911,
+      "segundos_entrenamiento": 1.8
+    },
+    "gradient_boosting": {
+      "auc_validacion": 0.6996,
+      "segundos_entrenamiento": 14.5
+    }
+  },
+  "modelo_elegido": "gradient_boosting",
+  "tau": 0.155653,
+  "validacion_con_tau": {
+    "precision_balanceada": 0.6453,
+    "recall": 0.5747,
+    "accuracy": 0.695
+  },
+  "baseline_logistica_sin_tendencia": {
+    "auc_validacion": 0.6894,
+    "tau": 0.171697
+  },
+  "baseline_nadie_cancela_accuracy_validacion": 0.8519,
+  "segundos_totales": 69.5
+}
