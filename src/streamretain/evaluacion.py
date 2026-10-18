@@ -88,6 +88,8 @@ def ejecutar_caso(id_escenario: str, semilla: int, modelo: ModeloRiesgo, baselin
                                for t in sorted(pred["semana"].unique())])
         pred = pred.merge(etiquetas, on=["user_id", "semana"], how="left")
         pred["y"] = pred["y"].fillna(0).astype(int)
+        # análisis: ¿el positivo ya mostraba señal (caída de consumo) cuando se predijo?
+        pred["con_senal"] = [u in env.usuarios_con_senal(int(t)) for u, t in zip(pred["user_id"], pred["semana"])]
 
     m = {"escenario": id_escenario, "tipo": p["tipo_escenario"], "semilla": semilla,
          "n_predicciones": len(pred), "tasa_positivos": float(pred["y"].mean()) if len(pred) else float("nan"),
@@ -98,6 +100,12 @@ def ejecutar_caso(id_escenario: str, semilla: int, modelo: ModeloRiesgo, baselin
         m.update({"M1_accuracy": cm["accuracy"], "M1R_balanced_accuracy": cm["balanced_accuracy"],
                   "M2_recall": cm["recall"], "M3_precision_top_k": _precision_top_k(pred),
                   "M4_auc": cm["auc"]})
+        pos = pred[pred["y"] == 1]
+        m["fraccion_positivos_con_senal"] = float(pos["con_senal"].mean()) if len(pos) else float("nan")
+        m["recall_positivos_con_senal"] = float(pos.loc[pos["con_senal"], "prediccion"].mean()) \
+            if pos["con_senal"].any() else float("nan")
+        m["recall_positivos_sin_senal"] = float(pos.loc[~pos["con_senal"], "prediccion"].mean()) \
+            if (~pos["con_senal"]).any() else float("nan")
         m["baseline_nadie_accuracy"] = float((y == 0).mean())
         m["baseline_nadie_balanced_accuracy"] = 0.5
         if baseline is not None:
