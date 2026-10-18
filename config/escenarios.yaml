@@ -36,7 +36,7 @@ simulador_base:
 senal:
   semanas_decaimiento_previo: 3      # semanas antes de cancelar en que el consumo empieza a caer
   caida_consumo_media: 0.35          # caída relativa media del consumo de quien va a cancelar
-  ruido_consumo_rel: 0.30            # desviación relativa semanal del consumo (todos los usuarios)
+  ruido_consumo_rel: 0.25            # desviación relativa semanal del consumo (calibrado: 0.30 -> 0.25)
   aumento_dias_sin_login: 4.0        # días adicionales medios sin login de quien va a cancelar
   multiplicador_cambio_pago: 2.0     # razón de riesgo si hubo cambio reciente de método de pago
   fraccion_cancelacion_sin_senal: 0.25  # cancelaciones "súbitas", sin señal previa observable

@@ -1,0 +1,16 @@
+{
+  "criterio": "0.70 <= AUC(LR sin tendencia, semillas 1-10 -> 11-20, N2) <= 0.90",
+  "auc": 0.7009,
+  "cumple": true,
+  "tasa_positivos_entrenamiento": 0.1507,
+  "filas_entrenamiento": 138642,
+  "filas_prueba": 139059,
+  "senal": {
+    "semanas_decaimiento_previo": 3,
+    "caida_consumo_media": 0.35,
+    "ruido_consumo_rel": 0.25,
+    "aumento_dias_sin_login": 4.0,
+    "multiplicador_cambio_pago": 2.0,
+    "fraccion_cancelacion_sin_senal": 0.25
+  }
+}
