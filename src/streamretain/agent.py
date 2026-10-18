@@ -61,6 +61,7 @@ class StreamRetainAgent:
         self.semanas_decididas: list[int] = []
         # último estado de cada etapa (lo usan la interfaz y la evaluación)
         self.ultimos_rechazos = pd.DataFrame()
+        self.ultimo_estado = pd.DataFrame()
         self.ultimas_decisiones = pd.DataFrame()
         self.ultimas_acciones: list[dict] = []
         self.historial_aprendizaje: list[dict] = []
@@ -76,8 +77,9 @@ class StreamRetainAgent:
         if self.registro.detalle:
             datos["registros"] = _a_registros(lote)
         self.registro.evento("percepcion", semana, **datos)
-        return F.construir(self.memoria.ventana(semana, F.VENTANA), semana,
-                           self.memoria.semanas_historial(semana))
+        self.ultimo_estado = F.construir(self.memoria.ventana(semana, F.VENTANA), semana,
+                                         self.memoria.semanas_historial(semana))
+        return self.ultimo_estado
 
     # ================================================================ DECISIÓN
     def decide(self, estado: pd.DataFrame, semana: int) -> pd.DataFrame:
@@ -235,5 +237,5 @@ class StreamRetainAgent:
             "modelo": f"{self.modelo.tipo}-v{self.modelo.version}",
             "reentreno": (aprendizaje or {}).get("reentreno", ""),
         }
-        self.registro.evento("ciclo", semana, **resumen)
+        self.registro.evento("ciclo", **resumen)
         return resumen
