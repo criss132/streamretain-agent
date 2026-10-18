@@ -2,7 +2,7 @@
 #
 # REGLA: este archivo se congela con commit + tag `umbrales-congelados` ANTES de ejecutar la
 # evaluación. Prohibido modificar umbrales, aplicabilidad o protocolo después de ver resultados.
-# Estado: BORRADOR para el CP2 (pendiente de validación por la pareja).
+# Estado: APROBADO por la pareja en el CP2 (2026-10-18) y CONGELADO con el tag `umbrales-congelados`.
 
 version: 1
 
