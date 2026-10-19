@@ -1,7 +1,8 @@
 # Entornos virtuales (el del proyecto vive fuera de OneDrive: C:\dev\venvs\agente)
-.venv/
-venv/
-env/
+# (anclados a la raíz: "env/" sin "/" inicial ignoraba el paquete src/streamretain/env/)
+/.venv/
+/venv/
+/env/
 
 # Python
 __pycache__/
