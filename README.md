@@ -1,4 +1,4 @@
-﻿# StreamRetain-Agent
+# StreamRetain-Agent
 
 Agente inteligente **de aprendizaje** (con estado interno por suscriptor) que cada semana estima qué suscriptores de una plataforma de streaming cancelarán en las próximas 4 semanas, prioriza los de mayor riesgo y activa ofertas de retención mediante una API de marketing. Además aprende de los resultados.
 
@@ -7,7 +7,7 @@ Pareja: Christian David Menco Galván (T00058749) y Levis Adrian Ortiz Cano (T00
 
 > **Todos los datos son sintéticos.** No tenemos acceso a una plataforma real, así que el entorno es un simulador estocástico con semilla (`src/streamretain/env/simulator.py`). Genera las percepciones de la sección 5 del diseño y respeta las propiedades de ambiente de la sección 3. Ningún resultado de este repositorio proviene de usuarios reales.
 
-- **Aplicación desplegada:** _[pendiente: URL de Streamlit Community Cloud]_
+- **Aplicación desplegada:** https://streamretain-agent.streamlit.app/
 - **Video de respaldo:** _[pendiente]_
 - **Documento de diseño ajustado:** `docs/Diseno_Ajustado_StreamRetain.pdf`
 

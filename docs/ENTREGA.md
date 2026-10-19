@@ -7,7 +7,7 @@
 
 - [ ] **Documento ajustado en PDF:** `docs/Diseno_Ajustado_StreamRetain.pdf`. Incluye la matriz de decisión y la sección 9 «Desarrollo del agente». Fuente editable: `docs/Diseno_Ajustado_StreamRetain.docx`.
 - [ ] **Enlace al repositorio** con README e instrucciones de ejecución: https://github.com/criss132/streamretain-agent
-- [ ] **Enlace a la plataforma desplegada:** _[pendiente: URL de Streamlit Cloud]_. Video de respaldo (≤ 20 min): _[pendiente]_.
+- [ ] **Enlace a la plataforma desplegada:** https://streamretain-agent.streamlit.app/. Video de respaldo (≤ 20 min): _[pendiente]_.
 - [ ] **Logs de las pruebas** (CSV, JSON o TXT) referenciados en la tabla de resultados:
   - `results/resultados.csv`: tabla obligatoria.
   - `results/detalle_por_caso.csv`: 130 casos con todas las métricas.
