@@ -24,7 +24,7 @@
 
 ## Lo que no se cumplió y por qué
 
-- **M1 (accuracy, 74,5 %).** Queda por debajo del baseline trivial "nadie cancela", que logra 85 %. Es el efecto que anticipamos en el CP2 (por eso existe M1R): τ maximiza el índice de Youden, es decir, acepta falsos positivos para detectar a quien sí cancela. Un τ que maximizara la accuracy se acercaría a "nadie cancela" y no serviría para retener a nadie.
+- **M1 (accuracy, 74,5 %).** Queda por debajo del baseline trivial "nadie cancela", que logra 83,9 % de media en los 130 casos (85 % en N2). Es el efecto que anticipamos en el CP2 (por eso existe M1R): τ maximiza el índice de Youden, es decir, acepta falsos positivos para detectar a quien sí cancela. Un τ que maximizara la accuracy se acercaría a "nadie cancela" y no serviría para retener a nadie.
 - **M1R (69,3 %) y M4 (0,761): la causa principal es la falta de señal.** Cruzamos cada predicción con el estado interno del simulador:
   - Solo el **57,4 %** de quienes cancelan en las 4 semanas siguientes ya mostraba alguna señal cuando se hizo la predicción.
   - El resto todavía no había decidido cancelar: el consumo empieza a caer 3 semanas antes de la baja, así que quien cancela en la semana t+4 aún no ha cambiado en t.
