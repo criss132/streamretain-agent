@@ -2,6 +2,8 @@
 
 Pareja: Christian David Menco Galván (T00058749) · Levis Adrian Ortiz Cano (T00083674)
 
+Nota: los hashes de commit citados en las filas 1–9 son anteriores a la reescritura del historial del 18-oct-2026. Su equivalencia actual está en `docs/HASHES.md`.
+
 Regla: una fila por bloque de trabajo asistido por IA. Ninguna fila se inventa ni se borra. La columna **Verificación humana** la completa la pareja después de revisar el resultado.
 
 | # | Fecha | Herramienta / modelo | Tarea | Prompt o instrucción (resumen) | Qué se usó del resultado | Verificación humana |
@@ -15,3 +17,4 @@ Regla: una fila por bloque de trabajo asistido por IA. Ninguna fila se inventa n
 | 7 | 2026-10-18 | Claude Code (Claude Opus 5.5) | Análisis de resultados, app Streamlit, diagramas Mermaid (arquitectura y secuencia típica y de excepción), README y guion del video | Plan, secciones 5, 8, 10 y 11 | `docs/analisis_resultados.md`, `app/streamlit_app.py`, `docs/diagramas/*.mmd` y `*.png`, `README.md`, `docs/GUION_VIDEO.md` | Resultados y análisis aprobados por la pareja en CP3 (2026-10-18) sin cambios |
 | 8 | 2026-10-18 | Claude Code (Claude Opus 5.5) | Documento de diseño ajustado: tabla de cambios, sección de selección (Fase 1), secciones 1–8 corregidas, sección 9 nueva, conclusiones y referencias APA 7; exportación a PDF con Word y revisión visual página por página | "Avanza con el documento ajustado (PDF) y prepara el CP4" | `scripts/build_documento.py`, `docs/Diseno_Ajustado_StreamRetain.{docx,pdf}`. Las cifras se leen de `results/`. El texto de las secciones 1–8 conserva el original de L. Ortiz con las correcciones marcadas en la tabla de cambios | _(pendiente)_ |
 | 9 | 2026-10-18 | Claude Code (Claude Opus 5.5) | CP4: push aprobado por la pareja, diagnóstico del fallo de despliegue y verificación de la app publicada | "Haz push de main y del tag"; log de error de Streamlit Cloud | El `.gitignore` (patrón `env/`) excluía `src/streamretain/env/`. Se ancló el patrón a la raíz y se subió el paquete (commit `1e69a2d`); se verificó con un clon limpio (9 pruebas OK) y en https://streamretain-agent.streamlit.app/ (ciclo N2: 1.988 puntuados, latencia 1,85 s) | _(pendiente)_ |
+| 10 | 2026-10-18 | Claude Code (Claude Opus 5.5) | A pedido de la pareja, quitar la coautoría de Claude de los mensajes de commit: reescritura del historial, traslado del tag y force push | "Quita la línea Co-Authored-By de todos los commits, mueve el tag, agrega la tabla de equivalencias y haz force push" | Solo cambiaron los mensajes; contenido, autores y fechas idénticos (mismo árbol final). Equivalencias en `docs/HASHES.md`. El uso de IA sigue declarado en esta bitácora | _(pendiente)_ |

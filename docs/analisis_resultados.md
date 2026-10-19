@@ -1,6 +1,6 @@
 # Análisis de resultados (Fase 3)
 
-**Fuente:** `results/resultados.csv` y `results/detalle_por_caso.csv`, generados por `python scripts/run_evaluation.py` (commit `2dbc2c8`). Son 130 casos: 13 escenarios × 10 semillas de prueba. Los umbrales se congelaron antes de probar (tag `umbrales-congelados`) y no se cambió nada después de ver los resultados. **Todos los datos son sintéticos.**
+**Fuente:** `results/resultados.csv` y `results/detalle_por_caso.csv`, generados por `python scripts/run_evaluation.py` (commit `2dbc2c8`, hoy `e8b855f`; ver `docs/HASHES.md`). Son 130 casos: 13 escenarios × 10 semillas de prueba. Los umbrales se congelaron antes de probar (tag `umbrales-congelados`) y no se cambió nada después de ver los resultados. **Todos los datos son sintéticos.**
 
 | Medida | Umbral | Resultado (media ± d.e.) | ¿Cumple? | Casos que lo alcanzan |
 |---|---|---|---|---|
