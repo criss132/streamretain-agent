@@ -7,8 +7,14 @@ Pareja: Christian David Menco Galván (T00058749) y Levis Adrian Ortiz Cano (T00
 
 > **Todos los datos son sintéticos.** No tenemos acceso a una plataforma real, así que el entorno es un simulador estocástico con semilla (`src/streamretain/env/simulator.py`). Genera las percepciones de la sección 5 del diseño y respeta las propiedades de ambiente de la sección 3. Ningún resultado de este repositorio proviene de usuarios reales.
 
-- **Aplicación desplegada:** https://streamretain-agent.streamlit.app/
-- **Documento de diseño ajustado:** `docs/Diseno_Ajustado_StreamRetain.pdf`
+- **Repositorio con código e instrucciones:** [criss132/streamretain-agent](https://github.com/criss132/streamretain-agent).
+- **Aplicación desplegada (evidencia de funcionamiento):** [StreamRetain en Streamlit](https://streamretain-agent.streamlit.app/).
+- **Documento ajustado en PDF:** [Diseno_Ajustado_StreamRetain.pdf](docs/Diseno_Ajustado_StreamRetain.pdf). Incluye la matriz de decisión y la sección 9 «Desarrollo del agente».
+- **Tabla de resultados y evidencia:** [resultados.md](results/resultados.md) y [resultados.csv](results/resultados.csv).
+- **Logs de las 130 pruebas:** [carpeta de evaluación](logs/eval_20261018_1853_2dbc2c8/). El [detalle por caso](results/detalle_por_caso.csv) contiene la ruta individual en la columna `log`; el [resumen por ciclo](logs/eval_20261018_1853_2dbc2c8/resumen_ciclos.csv) se puede consultar directamente en GitHub.
+- **Bitácora de uso de IA y revisiones humanas:** [BITACORA_IA.md](docs/BITACORA_IA.md).
+
+Los logs individuales están comprimidos como `.jsonl.gz`: GitHub permite descargarlos, pero no muestra su contenido como texto. Para leerlos, descomprimir con 7-Zip o usar el comando Python de la sección 5. Ejemplos: [N2, semilla 1001](logs/eval_20261018_1853_2dbc2c8/detalle_N2_s1001.jsonl.gz) y [F3, semilla 1001](logs/eval_20261018_1853_2dbc2c8/detalle_F3_s1001.jsonl.gz).
 
 ---
 
@@ -17,9 +23,10 @@ Pareja: Christian David Menco Galván (T00058749) y Levis Adrian Ortiz Cano (T00
 Requiere Python 3.13; probado con 3.13.0. Conviene crear el entorno virtual **fuera de OneDrive**:
 
 ```powershell
+git clone https://github.com/criss132/streamretain-agent.git
+cd streamretain-agent
 py -3.13 -m venv C:\dev\venvs\agente
 C:\dev\venvs\agente\Scripts\Activate.ps1
-cd streamretain-agent
 pip install -r requirements.txt
 ```
 
