@@ -1,0 +1,48 @@
+sequenceDiagram
+    autonumber
+    actor U as Analista de retención
+    participant UI as Interfaz Streamlit
+    participant P as Agente · Percepción
+    participant D as Agente · Decisión / Aprendizaje
+    participant X as Agente · Acción
+    participant E as Entorno (StreamingEnv)
+    participant DB as Memoria (SQLite)
+    participant M as Marketing API (mock)
+
+    U->>UI: Ejecutar ciclo semanal(escenario N2, semilla)
+    UI->>P: run_cycle(env, semana)
+    P->>E: observar()
+    E-->>P: lote crudo (horas, días sin login, plan, cambio de pago)
+    P->>P: validar(lote) → válidos, rechazados
+    P->>DB: guardar_observaciones(válidos)
+    P->>DB: ventana(semana, 4) · semanas_historial(semana)
+    DB-->>P: historial por suscriptor
+    P->>P: features.construir() → estado
+    P->>D: decide(estado, semana)
+    loop cada suscriptor puntuado
+        D->>D: modelo.predecir() con sub-modelo completo
+    end
+    D->>DB: cola_pendiente() · ofertados_desde()
+    DB-->>D: cola de reintentos, ofertados recientes
+    D->>D: decidir(p, τ, presupuesto top-10 %)
+    D->>D: modelo.explicar(ofertados) → 3 factores
+    D->>DB: guardar_predicciones()
+    D->>X: act(decisiones, semana)
+    loop cada suscriptor con ofertar = True
+        X->>M: activate_offer(user_id, semana)
+        M->>E: registrar_oferta(user_id, semana)
+        M-->>X: {estado: activada, oferta_id}
+        X->>DB: guardar_intervencion(activada)
+    end
+    X-->>P: acciones (activadas / en cola)
+    Note over P,X: run_cycle() mide la latencia (perceive + decide + act + log) y luego llama a learn()
+    P->>D: learn(semana, env)
+    D->>E: resultados_reales(semana − 4)
+    E-->>D: canceló / permaneció
+    D->>DB: guardar_resultados()
+    alt cada 4 ciclos con datos suficientes
+        D->>D: _reentrenar() con compuerta (precisión balanceada en holdout)
+    end
+    P-->>UI: resumen del ciclo
+    UI-->>U: tabla de riesgo, factores y métricas
+    UI->>E: avanzar()

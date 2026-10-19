@@ -1,0 +1,25 @@
+{
+  "fecha": "2026-10-18T19:02:46",
+  "commit": "2dbc2c8",
+  "tag_umbrales": "umbrales-congelados",
+  "casos": 130,
+  "errores": 0,
+  "duracion_s": 538.2,
+  "procesos": 5,
+  "equipo": {
+    "so": "Windows-10-10.0.19045-SP0",
+    "procesador": "AMD64 Family 23 Model 96 Stepping 1, AuthenticAMD",
+    "python": "3.13.0"
+  },
+  "versiones": {
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1"
+  },
+  "logs": "logs/eval_20261018_1853_2dbc2c8",
+  "figuras": [
+    "medidas_por_escenario.png",
+    "agente_vs_baselines.png"
+  ],
+  "nota_latencia": "M6 medida con varios procesos en paralelo en el mismo equipo (cota conservadora)."
+}

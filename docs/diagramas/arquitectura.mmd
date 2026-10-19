@@ -1,0 +1,33 @@
+flowchart TB
+    UI["Interfaz Streamlit · app/streamlit_app.py<br/>(analista de retención)"]
+
+    subgraph AG["StreamRetain-Agent<br/>src/streamretain/agent.py"]
+        direction LR
+        PER["1 · Percepción<br/>perceive() · perception.validar()"]
+        MEM[("2 · Memoria SQLite<br/>memory.py")]
+        FEA["3 · Estado interno<br/>features.construir()"]
+        MOD["4 · Modelo de riesgo<br/>model.py: completo / sin tendencia<br/>+ explicación por oclusión"]
+        DEC["5 · Decisión<br/>decide() · decision.decidir()<br/>τ + presupuesto top-10 %"]
+        ACT["6 · Acción<br/>act(): reintentos y cola"]
+        LRN["7 · Aprendizaje<br/>learn(): compuerta de reentrenamiento"]
+        PER --> MEM --> FEA --> MOD --> DEC --> ACT
+        MEM --> LRN --> MOD
+    end
+
+    subgraph ENT["Entorno simulado (sintético)<br/>env/simulator.py"]
+        direction LR
+        SEN["Sensores: horas vistas · días sin login<br/>tipo de plan · cambio de pago"]
+        SUS["Suscriptores<br/>(intención de cancelar latente)"]
+        MKT["Marketing API (mock)<br/>errores y timeouts"]
+        SUS --> SEN
+        MKT -. "oferta efectiva (probabilística)" .-> SUS
+    end
+
+    LOG[("Log JSONL · logging_utils.py<br/>percepciones, decisiones y acciones con marca de tiempo")]
+
+    UI -- "run_cycle(env, semana)" --> PER
+    DEC -- "tabla de riesgo + factores" --> UI
+    SEN -- "lote semanal" --> PER
+    ACT -- "activate_offer()" --> MKT
+    SUS -- "resultado a 4 semanas" --> LRN
+    AG -.-> LOG

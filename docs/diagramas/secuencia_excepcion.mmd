@@ -1,0 +1,49 @@
+sequenceDiagram
+    autonumber
+    actor U as Analista de retención
+    participant UI as Interfaz Streamlit
+    participant P as Agente · Percepción
+    participant D as Agente · Decisión
+    participant X as Agente · Acción
+    participant E as Entorno (StreamingEnv)
+    participant DB as Memoria (SQLite)
+    participant M as Marketing API (mock)
+
+    U->>UI: Ejecutar ciclo semanal(escenario F1 / F2 / F3)
+    UI->>P: run_cycle(env, semana)
+    P->>E: observar()
+    E-->>P: lote con NaN, negativos, fuera de rango o plan desconocido
+    P->>P: validar(lote)
+    alt registro inválido
+        P->>DB: guardar_rechazos(user_id, motivo)
+        P->>P: registro.evento("percepcion", rechazos)
+    else registro válido
+        P->>DB: guardar_observaciones()
+    end
+    P->>D: decide(estado, semana)
+    loop cada suscriptor puntuado
+        alt historial_suficiente = False (usuario nuevo)
+            D->>D: predecir(sub-modelo sin_tendencia) → confianza "baja"
+        else historial suficiente
+            D->>D: predecir(sub-modelo completo) → confianza "normal"
+        end
+    end
+    D->>X: act(decisiones, semana)
+    loop cada suscriptor con ofertar = True
+        X->>M: activate_offer(user_id, semana)
+        alt API responde
+            M-->>X: {estado: activada}
+        else error 503 o timeout
+            M--xX: MarketingAPIError / MarketingTimeout
+            X->>X: registro.evento("accion", siguiente = "reintentar")
+            loop hasta 3 reintentos
+                X->>M: activate_offer(user_id, semana)
+            end
+            opt la falla persiste
+                X->>DB: encolar(user_id, semana)
+                X->>X: registro.evento("encolado")
+            end
+        end
+    end
+    X-->>UI: acciones (activadas / en cola)
+    UI-->>U: rechazos con motivo, baja confianza, fallos de API y cola
