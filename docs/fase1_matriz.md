@@ -1,6 +1,6 @@
 # Fase 1 — Selección justificada del agente
 
-> **Estado: BORRADOR para el CP1.** La pareja valida o corrige pesos, puntajes y evidencias en `config/matriz.yaml`. Si cambia algo, se vuelve a ejecutar `python scripts/matriz_decision.py` y se actualiza este texto con los números nuevos.
+> **Estado: selección aplicada.** Matriz aprobada en CP1 según la fila 2 de `docs/BITACORA_IA.md`. StreamRetain-Agent es el agente implementado. Los pesos, puntajes y evidencias están en `config/matriz.yaml`.
 
 **Agentes comparados:** A = PickFlow-Agent (optimización de picking en bodega, Christian Menco) · B = StreamRetain-Agent (predicción de cancelación en streaming, Levis Ortiz).
 

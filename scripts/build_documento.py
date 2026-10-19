@@ -2,7 +2,7 @@
 
 Parte del documento de la Tarea 2 (StreamRetain-Agent, L. Ortiz, 25-ago-2026), lo corrige y
 lo amplía según la guía de la Tarea 3. Los números de la matriz y de las pruebas se leen de
-results/ (no se copian a mano). Los enlaces y minutos del video se leen de docs/enlaces.yaml.
+results/ (no se copian a mano). Los enlaces de entrega se leen de docs/enlaces.yaml.
 
 Uso: python scripts/build_documento.py [--sin-pdf]
 Requiere: python-docx (y Microsoft Word en Windows para exportar a PDF).
@@ -643,6 +643,8 @@ def desarrollo(D: Doc, X: dict):
         "IA.", align="just")
 
     # 9.7
+    # Mantener el protocolo y la tabla de resultados legibles en una página nueva.
+    D.salto()
     D.h("9.7 Pruebas", 2)
     casos = X["casos"]
     D.p(f"**Protocolo.** Probamos 13 escenarios × 10 semillas de prueba = **{len(casos)} casos**: 6 normales "
@@ -652,18 +654,15 @@ def desarrollo(D: Doc, X: dict):
         "caso el agente arranca desde cero y corre 8 ciclos (12 en N5). M1–M4 se miden contra la cancelación "
         "«sin intervención» que conoce el simulador; M5 compara las fallas inyectadas con lo que registró el "
         "agente. Cada medida se reporta como media ± desviación estándar sobre sus casos.", align="just")
-    mins = en.get("minutos_video") or {}
     filas = []
     for _, r in X["resultados"].iterrows():
-        mid = r["Medida"].split(" — ")[0]
         col = r["Evidencia"].split("(columna ")[1].split(")")[0]
-        minuto = mins.get(mid) or "[pendiente]"
         filas.append([coma(r["Medida"]).replace(" — ", ": "), r["Fórmula"], coma(r["Umbral"]).replace(">=", "≥").replace("<=", "≤"),
                       r["Casos ejecutados"].split(" (")[0], coma(r["Resultado obtenido"]),
-                      f"**{r['¿Cumple?']}**", f"detalle_por_caso.csv ({col}); logs detalle_*_s1001; video: {minuto}"])
+                      f"**{r['¿Cumple?']}**", f"detalle_por_caso.csv ({col}); logs detalle_*_s1001.jsonl.gz"])
     t = D.tabla("Tabla de resultados (obligatoria). Fuente: `results/resultados.csv`; logs en "
                 f"`{X['entorno']['logs']}/`.", ["Medida de desempeño", "Fórmula", "Umbral", "Casos ejecutados",
-                                                 "Resultado obtenido", "¿Cumple?", "Evidencia (log, minuto del video)"],
+                                                 "Resultado obtenido", "¿Cumple?", "Evidencia (CSV y logs)"],
                 filas, [3.4, 3.2, 1.6, 1.4, 2.4, 1.3, 3.7], 7.5)
     f4 = D.figura(RES / "figuras" / "medidas_por_escenario.png", "Media ± d.e. de cada medida por escenario "
                   "(10 semillas). Línea punteada = umbral; gris = escenario fuera de la medida.", 11.5)
@@ -729,7 +728,6 @@ def desarrollo(D: Doc, X: dict):
     D.h("9.9 Enlaces", 2)
     D.lista([f"**Repositorio:** {en['repositorio']}",
              f"**Plataforma desplegada (Streamlit Community Cloud):** {en['despliegue'] or '[pendiente]'}",
-             f"**Video de respaldo:** {en['video'] or '[pendiente]'}",
              "**Logs de las pruebas:** `logs/eval_20261018_1853_2dbc2c8/` y `results/detalle_por_caso.csv`",
              "**Bitácora de uso de IA:** `docs/BITACORA_IA.md`"])
 

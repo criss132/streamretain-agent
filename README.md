@@ -8,7 +8,6 @@ Pareja: Christian David Menco Galván (T00058749) y Levis Adrian Ortiz Cano (T00
 > **Todos los datos son sintéticos.** No tenemos acceso a una plataforma real, así que el entorno es un simulador estocástico con semilla (`src/streamretain/env/simulator.py`). Genera las percepciones de la sección 5 del diseño y respeta las propiedades de ambiente de la sección 3. Ningún resultado de este repositorio proviene de usuarios reales.
 
 - **Aplicación desplegada:** https://streamretain-agent.streamlit.app/
-- **Video de respaldo:** _[pendiente]_
 - **Documento de diseño ajustado:** `docs/Diseno_Ajustado_StreamRetain.pdf`
 
 ---
@@ -114,7 +113,7 @@ models/        modelo_agente.joblib, baseline_logistica.joblib
 tests/         pytest
 results/       resultados, figuras, matriz, entrenamiento
 logs/          logs de la evaluación final
-docs/          fase 1, análisis, diagramas, bitácora de IA, guion de video, documento ajustado
+docs/          fase 1, análisis, diagramas, bitácora de IA, revisión y documento ajustado
 ```
 
 ## 7. Despliegue en Streamlit Community Cloud

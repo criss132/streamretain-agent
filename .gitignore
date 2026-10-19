@@ -5,6 +5,9 @@
 /env/
 
 # Python
+# Insumos locales de la entrega
+/entradas/
+
 __pycache__/
 *.py[cod]
 *.egg-info/

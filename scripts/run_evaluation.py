@@ -103,7 +103,7 @@ def tabla_resultados(casos: pd.DataFrame, cfg: dict) -> pd.DataFrame:
             "Normal / Límite / Falla": " / ".join(fmt(por_tipo[t]) if not np.isnan(por_tipo[t]) else "—"
                                                   for t in ("normal", "limite", "falla")),
             "Evidencia": f"results/detalle_por_caso.csv (columna {col}); logs con detalle: {len(logs)} archivos "
-                         f"detalle_*_s{SEMILLA_DETALLE}.jsonl.gz; minuto del video: [pendiente]",
+                         f"detalle_*_s{SEMILLA_DETALLE}.jsonl.gz",
             "media": media, "de": de,
         })
     return pd.DataFrame(filas)

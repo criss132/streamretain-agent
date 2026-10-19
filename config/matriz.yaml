@@ -1,7 +1,7 @@
 # Matriz de decisión ponderada — Fase 1 (Tarea 3)
 # Los pesos se definen ANTES de puntuar y deben sumar 1.0.
 # Cada puntaje (1–5) lleva una frase de evidencia: un puntaje sin evidencia no cuenta.
-# Estado: BORRADOR propuesto por Claude Code; la pareja lo valida o corrige en el CP1.
+# Estado: matriz aplicada; aprobación CP1 registrada en docs/BITACORA_IA.md, fila 2.
 
 agentes:
   A: "PickFlow-Agent (optimización de picking en bodega)"

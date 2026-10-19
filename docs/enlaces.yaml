@@ -1,14 +1,5 @@
-# Enlaces y datos que se completan en el CP4 (después de publicar el repo, desplegar y grabar).
+# Evidencia de funcionamiento: plataforma Streamlit (opción A de la guía).
 # Al cambiarlos, regenerar el documento: python scripts/build_documento.py
 repositorio: "https://github.com/criss132/streamretain-agent"
 despliegue: "https://streamretain-agent.streamlit.app/"   # URL de Streamlit Community Cloud
-video: ""             # enlace al video (YouTube no listado / OneDrive / Drive)
-minutos_video:        # minuto del video donde se muestra cada medida (columna Evidencia)
-  M1: ""
-  M1R: ""
-  M2: ""
-  M3: ""
-  M4: ""
-  M5: ""
-  M6: ""
 fecha_documento: "18 de octubre de 2026"
